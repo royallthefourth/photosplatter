@@ -1,0 +1,8 @@
+[Unit]
+Description=Photosplatter http photo gallery
+
+[Service]
+ExecStart=photosplatter --path %h/photos --port 8080
+
+[Install]
+WantedBy=default.target

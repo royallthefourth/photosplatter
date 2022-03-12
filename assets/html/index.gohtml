@@ -1,0 +1,10 @@
+<!doctype html>
+<head>
+    <title>Photosplatter on {{hostname}}</title>
+    <link rel="stylesheet" href="/assets/screen.css">
+</head>
+<body>
+{{range $photo := .Photos}}
+    <img src="/images/{{$photo}}">
+{{end}}
+</body>
