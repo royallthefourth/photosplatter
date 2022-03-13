@@ -15,5 +15,6 @@ func getCreationTime(entry os.DirEntry) (time.Time, error) {
 		return time.Now(), err
 	}
 	creationTime := info.Sys().(*syscall.Stat_t).Ctim
-	return time.Unix(creationTime.Sec, creationTime.Nsec), err
+	// these typecasts are necessary for 32 bit compile targets
+	return time.Unix(int64(creationTime.Sec), int64(creationTime.Nsec)), err
 }
