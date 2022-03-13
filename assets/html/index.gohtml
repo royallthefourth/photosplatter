@@ -4,7 +4,5 @@
     <link rel="stylesheet" href="/assets/screen.css">
 </head>
 <body>
-{{range $photo := .Photos}}
-    <img src="/images/{{$photo}}">
-{{end}}
+{{range $photo := .Photos}}<a href="/images/{{$photo.Name}}"><img src="/images/{{$photo.Name}}"></a>{{end}}
 </body>

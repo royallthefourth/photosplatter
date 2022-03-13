@@ -6,9 +6,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 )
 
-func readPath(p string) ([]os.DirEntry, error) {
+func readPath(p string) ([]photo, error) { // TODO return PhotoTree
 	if p == "" {
 		return nil, errors.New("p flag must be nonempty")
 	}
@@ -17,20 +18,35 @@ func readPath(p string) ([]os.DirEntry, error) {
 	if err != nil {
 		return nil, err
 	}
-	return os.ReadDir(p)
+	rawFiles, err := os.ReadDir(p)
+	if err != nil {
+		return nil, err
+	}
+	return onlyPhotos(rawFiles), err
 }
 
-func onlyPhotos(files []os.DirEntry) []string {
-	images := make([]string, 0)
+func onlyPhotos(files []os.DirEntry) []photo { // TODO return PhotoTree
+	photos := make([]photo, 0)
+	var creationTime time.Time
 	for _, file := range files {
 		data, err := ioutil.ReadFile(file.Name())
 		if err != nil {
 			log.Printf("Error while reading %s: %s", file.Name(), err.Error())
 			continue
 		}
+
+		creationTime, err = getCreationTime(file)
+		if err != nil {
+			log.Printf("Error getting creation time %s: %s", file.Name(), err.Error())
+			continue
+		}
+
 		if filetype.IsImage(data) {
-			images = append(images, file.Name())
+			photos = append(photos, photo{
+				Created: creationTime,
+				Name:    file.Name(),
+			})
 		}
 	}
-	return images
+	return photos
 }
