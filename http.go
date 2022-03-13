@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"photosplatter/assets/html"
+	"photosplatter/assets"
 )
 
 type photoSet struct {
@@ -11,7 +11,7 @@ type photoSet struct {
 
 func index(photos []photo) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
-		err := html.Index.Execute(w, photoSet{Photos: photos})
+		err := assets.Index.Execute(w, photoSet{Photos: photos})
 		if err != nil {
 			panic(err)
 		}

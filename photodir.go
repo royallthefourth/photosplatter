@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func readPath(p string) ([]photo, error) { // TODO return PhotoTree
+func readPath(p string) ([]photo, error) {
 	if p == "" {
 		return nil, errors.New("p flag must be nonempty")
 	}
@@ -25,7 +25,7 @@ func readPath(p string) ([]photo, error) { // TODO return PhotoTree
 	return onlyPhotos(rawFiles), err
 }
 
-func onlyPhotos(files []os.DirEntry) []photo { // TODO return PhotoTree
+func onlyPhotos(files []os.DirEntry) []photo {
 	photos := make([]photo, 0)
 	var creationTime time.Time
 	for _, file := range files {

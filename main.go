@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"photosplatter/assets/html"
+	"photosplatter/assets"
 	"sort"
 	"time"
 )
@@ -31,7 +31,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir(*path))))
-	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(html.Assets))))
+	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets.Assets))))
 	mux.HandleFunc("/", index(photos))
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", *port), mux))
 }
