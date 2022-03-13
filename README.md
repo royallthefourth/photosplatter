@@ -5,7 +5,11 @@ Photosplatter serves an HTML index of photos from a directory.
 Photosplatter is extremely simple to operate.
 Small, single-board servers can easily run it at acceptable performance. 
 Provided a path and a port number, it will find photos in the directory and display them.
-It's a single binary that needs no other files or servers in order to work.
+
+* No config files
+* No databases
+* Automatic content directory rescans
+* Only one file to deploy
 
 ## Basic Operation
 Place `photosplatter` somewhere and run it:
