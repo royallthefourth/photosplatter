@@ -27,5 +27,6 @@ func main() {
 	mux.Handle("/assets/", libhttp.StripPrefix("/assets/", libhttp.FileServer(libhttp.FS(assets.Assets))))
 
 	mux.HandleFunc("/", http.Index)
+	mux.HandleFunc("/api/photos", http.AllPhotos)
 	log.Fatal(libhttp.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", *port), mux))
 }

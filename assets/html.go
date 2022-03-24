@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-//go:embed screen.css
+//go:embed app.js screen.css
 var Assets embed.FS
 
 //go:embed index.gohtml

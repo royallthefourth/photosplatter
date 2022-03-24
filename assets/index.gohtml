@@ -1,8 +1,10 @@
 <!doctype html>
+<html lang="en">
 <head>
     <title>Photosplatter on {{hostname}}</title>
     <link rel="stylesheet" href="/assets/screen.css">
+    <script defer src='/assets/app.js'></script>
 </head>
 <body>
-{{range $photo := .Photos}}<a href="/images/{{$photo.Name}}"><img src="/images/{{$photo.Name}}"></a>{{end}}
 </body>
+</html>
