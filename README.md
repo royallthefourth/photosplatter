@@ -11,6 +11,10 @@ Provided a path and a port number, it will find photos in the directory and disp
 * Automatic content directory rescans
 * Only one file to deploy
 
+## Building
+To build Photosplatter, run `build.sh`.
+This will produce a single `photosplatter` executable with everything you need packed inside.
+
 ## Basic Operation
 Place `photosplatter` somewhere and run it:
 
