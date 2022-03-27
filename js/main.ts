@@ -1,10 +1,17 @@
-import App from './App.svelte';
+let body = document.getElementsByTagName("body")[0]
 
-const app = new App({
-	target: document.body,
-	props: {
-		name: 'world'
+fetch("/api/photos").then((resp) => {
+	return resp.json() as Promise<string[]>
+}).then((photos) => {
+	for(let p of photos) {
+		body.append(createImage(p))
 	}
-});
 
-export default app;
+})
+
+function createImage(path: string): HTMLImageElement {
+	const img = document.createElement('img')
+	img.src = `/images/${path}`
+	img.alt = `Photo ${path}`
+	return img
+}
