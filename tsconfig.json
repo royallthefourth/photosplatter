@@ -1,6 +1,10 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
-
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "AMD",
+    "outFile": "assets/app.js"
+  },
   "include": ["js/**/*"],
-  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
+  "exclude": ["node_modules/*"],
 }
