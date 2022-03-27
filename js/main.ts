@@ -1,4 +1,4 @@
-let body = document.getElementsByTagName("body")[0]
+const body = document.getElementsByTagName("body")[0]
 
 fetch("/api/photos").then((resp) => {
 	return resp.json() as Promise<string[]>
@@ -6,7 +6,6 @@ fetch("/api/photos").then((resp) => {
 	for(let p of photos) {
 		body.append(createImage(p))
 	}
-
 })
 
 function createImage(path: string): HTMLImageElement {
