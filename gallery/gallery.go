@@ -1,6 +1,7 @@
 package gallery
 
 import (
+	"errors"
 	"github.com/h2non/filetype"
 	"io/ioutil"
 	"log"
@@ -15,53 +16,63 @@ type Photo struct {
 	Name    string
 }
 
-type Gallery struct {
-	Photos   []Photo
-	RawCount int
+type Gallery interface {
+	Photos() []Photo
+	ScanForChanges()
 }
 
-var (
-	gal Gallery
-	mu  sync.Mutex
-)
+func NewDiskBacked(path string) (DiskBacked, error) {
+	if path == "" {
+		return DiskBacked{}, errors.New("path must be nonempty")
+	}
 
-func GetGallery() Gallery {
-	mu.Lock()
-	defer mu.Unlock()
-	return gal
+	return DiskBacked{
+		path: path,
+	}, os.Chdir(path)
 }
 
-func WatchFiles(p string) {
+type DiskBacked struct {
+	mu       sync.Mutex
+	path     string
+	photos   []Photo
+	rawCount int
+}
+
+func (d *DiskBacked) Photos() []Photo {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return d.photos
+}
+
+func (d *DiskBacked) ScanForChanges() {
 	var (
 		start, finish time.Time
 	)
 	for {
-		rawFiles, err := os.ReadDir(p)
+		rawFiles, err := os.ReadDir(d.path)
 		if err != nil {
 			log.Printf("Dir scan error: %s", err.Error())
 		}
 		newCount := len(rawFiles)
 
-		if gal.RawCount != newCount {
-			mu.Lock()
+		if d.rawCount != newCount {
+			d.mu.Lock()
 			start = time.Now()
-			gal = scanFiles(rawFiles)
+			d.rawCount = len(rawFiles)
+			d.photos = scanFiles(rawFiles)
 			finish = time.Now()
-			log.Printf("Scanned %d photos in %.3f seconds", gal.RawCount, float32(finish.Sub(start).Milliseconds())/1000)
-			mu.Unlock()
+			log.Printf("Scanned %d photos in %.3f seconds", d.rawCount, float32(finish.Sub(start).Milliseconds())/1000)
+			d.mu.Unlock()
 		}
 
 		time.Sleep(time.Minute)
 	}
 }
 
-func scanFiles(rawFiles []os.DirEntry) Gallery {
-	newGal := Gallery{
-		Photos:   onlyPhotos(rawFiles),
-		RawCount: len(rawFiles),
-	}
-	sort.Sort(sort.Reverse(ByDate(newGal.Photos)))
-	return newGal
+func scanFiles(rawFiles []os.DirEntry) []Photo {
+	photos := onlyPhotos(rawFiles)
+	sort.Sort(sort.Reverse(ByDate(photos)))
+	return photos
 }
 
 func onlyPhotos(files []os.DirEntry) []Photo {
