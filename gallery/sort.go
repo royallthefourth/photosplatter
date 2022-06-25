@@ -1,7 +1,16 @@
 package gallery
 
-type ByDate []Photo
+import "github.com/jfcg/sorty"
 
-func (p ByDate) Len() int           { return len(p) }
-func (p ByDate) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
-func (p ByDate) Less(i, j int) bool { return p[i].Created.Before(p[j].Created) }
+func SortPhotosDesc(p []Photo) {
+	lsw := func(i, k, r, s int) bool {
+		if p[i].Created.After(p[k].Created) {
+			if r != s {
+				p[r], p[s] = p[s], p[r]
+			}
+			return true
+		}
+		return false
+	}
+	sorty.Sort(len(p), lsw)
+}

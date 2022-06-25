@@ -3,12 +3,13 @@ package http
 import (
 	"encoding/json"
 	"github.com/icrowley/fake"
+	"github.com/jfcg/sorty"
 	"io"
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
 	"photosplatter/gallery"
-	"sort"
+	"runtime"
 	"testing"
 	"time"
 )
@@ -55,10 +56,11 @@ func BenchmarkAllPhotos(b *testing.B) {
 	}
 }
 
-func BenchmarkSort(b *testing.B) {
+func BenchmarkSorty(b *testing.B) {
+	sorty.Mxg = uint32(runtime.GOMAXPROCS(0))
 	g := fakeGallery(1_000_000)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		sort.Sort(sort.Reverse(gallery.ByDate(g.Photos())))
+		gallery.SortPhotosDesc(g.Photos())
 	}
 }

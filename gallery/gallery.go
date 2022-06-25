@@ -3,10 +3,11 @@ package gallery
 import (
 	"errors"
 	"github.com/h2non/filetype"
+	"github.com/jfcg/sorty"
 	"io/ioutil"
 	"log"
 	"os"
-	"sort"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -71,7 +72,8 @@ func (d *DiskBacked) ScanForChanges() {
 
 func scanFiles(rawFiles []os.DirEntry) []Photo {
 	photos := onlyPhotos(rawFiles)
-	sort.Sort(sort.Reverse(ByDate(photos)))
+	sorty.Mxg = uint32(runtime.GOMAXPROCS(0))
+	SortPhotosDesc(photos)
 	return photos
 }
 
