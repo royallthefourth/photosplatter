@@ -29,5 +29,6 @@ func main() {
 
 	mux.HandleFunc("/", http.Index)
 	mux.HandleFunc("/api/photos", http.AllPhotos(&gal))
+	fmt.Printf("Listening on http://0.0.0.0:%d\n", *port)
 	log.Fatal(libhttp.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", *port), mux))
 }
